@@ -6,8 +6,8 @@ export interface User {
   createdAt: Date
   email: string
   password: string
-  firstName: string | null
-  lastName: string | null
+  firstName?: string | null
+  lastName?: string | null
   role: PrismaRole
   posts: Post[]
 }
