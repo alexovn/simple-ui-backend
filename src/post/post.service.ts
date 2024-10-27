@@ -22,18 +22,34 @@ export class PostService {
     return await this.prisma.post.findMany()
   }
 
-  async createPost(data: PostCreateDto): Promise<Post> {
+  async createPost(data: PostCreateDto, authorId: number): Promise<Post> {
+    console.log(authorId)
+
     return await this.prisma.post.create({
-      data
+      data: {
+        ...data,
+        author: {
+          connect: {
+            id: authorId
+          }
+        }
+      }
     })
   }
 
-  async updatePost(params: { id: number, data: PostUpdateDto }): Promise<Post> {
-    const { id, data } = params
+  async updatePost(params: { id: number, data: PostUpdateDto, authorId: number }): Promise<Post> {
+    const { id, data, authorId } = params
 
     return await this.prisma.post.update({
       where: { id },
-      data
+      data: {
+        ...data,
+        author: {
+          connect: {
+            id: authorId,
+          }
+        }
+      }
     })
   }
 

@@ -3,6 +3,7 @@ import { PostService } from './post.service';
 import { PostCreateDto } from './dto/post-create.dto';
 import { PostUpdateDto } from './dto/post-update.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { User } from 'src/auth/decorators/user.decorator';
 
 @Controller('posts')
 export class PostController {
@@ -21,13 +22,20 @@ export class PostController {
   }
 
   @Post()
-  async createPost(@Body() data: PostCreateDto) {
-    return this.postService.createPost(data)
+  async createPost(
+    @Body() data: PostCreateDto,
+    @User('id') authorId: number
+  ) {
+    return this.postService.createPost(data, authorId)
   }
 
   @Patch(':id')
-  async updatePost(@Param('id') id: string, @Body() data: PostUpdateDto) {
-    return this.postService.updatePost({id: Number(id), data})
+  async updatePost(
+    @Param('id') id: string,
+    @Body() data: PostUpdateDto,
+    @User('id') authorId: number
+  ) {
+    return this.postService.updatePost({ id: Number(id), data, authorId })
   }
 
   @Delete(':id')
