@@ -4,7 +4,7 @@ import { User } from 'src/user/interfaces/user.interface';
 import * as bcrypt from 'bcrypt';
 import { AccessToken } from './types/accessToken.type';
 import { UserService } from 'src/user/user.service';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { RegisterRequestDto } from './dto/register.request.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +30,7 @@ export class AuthService {
     return { access_token: this.jwtService.sign(payload) }
   }
 
-  async register(user: CreateUserDto): Promise<AccessToken> {
+  async register(user: RegisterRequestDto): Promise<AccessToken> {
     const existingUser = await this.userService.getUserByEmail(user.email)
     if (existingUser) {
       throw new BadRequestException('Email already exists')
