@@ -7,20 +7,20 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get()
+  async getUserByEmail(@Query('email') email: string) {
+    const user = await this.userService.getUserByEmail(email)
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`)
+    }
+    return user
+  }
+
   @Get(':id')
   async getUserById(@Param('id') id: string) {
     const user = await this.userService.getUserById(Number(id))
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`)
-    }
-    return user
-  }
-
-  @Get()
-  async getUserBy(@Query('email') email: string) {
-    const user = await this.userService.getUserByEmail(email)
-    if (!user) {
-      throw new NotFoundException(`User with email ${email} not found`)
     }
     return user
   }
