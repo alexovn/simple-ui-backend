@@ -2,16 +2,19 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { PostService } from './post.service';
 import { PostCreateDto } from './dto/post-create.dto';
 import { PostUpdateDto } from './dto/post-update.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @Public()
   @Get(':id')
   async getPost(@Param('id') id: string) {
     return this.postService.getPost(Number(id))
   }
 
+  @Public()
   @Get()
   async getPosts() {
     return this.postService.getPosts()
