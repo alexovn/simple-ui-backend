@@ -8,6 +8,11 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  async getUsers() {
+    return await this.userService.getUsers()
+  }
+
+  @Get('email')
   async getUserByEmail(@Query('email') email: string) {
     const user = await this.userService.getUserByEmail(email)
     if (!user) {
@@ -23,11 +28,6 @@ export class UserController {
       throw new NotFoundException(`User with id ${id} not found`)
     }
     return user
-  }
-
-  @Get()
-  async getUsers() {
-    return await this.userService.getUsers()
   }
 
   @Post()
