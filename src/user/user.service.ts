@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { User } from "./interfaces/user.interface";
+import { User, Users } from "./interfaces/user.interface";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { PaginationDto } from "src/common/dto/pagination.dto";
 
 @Injectable()
 export class UserService {
@@ -22,10 +23,34 @@ export class UserService {
     })
   }
 
-  async getUsers(): Promise<User[]> {
-    return this.prisma.user.findMany({
+  async getUsers(paginationDto: PaginationDto): Promise<Users> {
+    const {
+      page = 1,
+      limit = 10,
+      orderBy = 'createdAt',
+      orderDirection = 'desc'
+    } = paginationDto
+
+    const skip = (Number(page) - 1) * Number(limit)
+
+    const users = await this.prisma.user.findMany({
+      skip,
+      take: Number(limit),
+      orderBy: { [orderBy]: orderDirection },
       include: { posts: true }
     })
+
+    const total = await this.prisma.user.count()
+    const totalPages = Math.ceil(total / Number(limit))
+
+    return {
+      data: users,
+      meta: {
+        page,
+        total,
+        totalPages
+      }
+    }
   }
 
   async createUser(data: CreateUserDto): Promise<User> {

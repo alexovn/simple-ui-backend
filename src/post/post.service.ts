@@ -49,8 +49,6 @@ export class PostService {
   }
 
   async createPost(data: PostCreateDto, authorId: number): Promise<Post> {
-    console.log(authorId)
-
     return await this.prisma.post.create({
       data: {
         ...data,

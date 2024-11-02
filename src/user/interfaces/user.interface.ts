@@ -11,3 +11,12 @@ export interface User {
   role: PrismaRole
   posts: Post[]
 }
+
+export interface Users {
+  data: User[],
+  meta: {
+    page: number,
+    total: number,
+    totalPages: number
+  }
+}

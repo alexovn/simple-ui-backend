@@ -4,6 +4,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersResponseDto } from "./dto/users-response.dto";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { PaginationDto } from "src/common/dto/pagination.dto";
 
 @ApiTags('users')
 @Controller('users')
@@ -14,8 +15,8 @@ export class UserController {
   @ApiResponse({
     status: 200,
   })
-  async getUsers() {
-    return await this.userService.getUsers()
+  async getUsers(@Query() paginationDto: PaginationDto) {
+    return await this.userService.getUsers(paginationDto)
   }
 
   @Get('email')
