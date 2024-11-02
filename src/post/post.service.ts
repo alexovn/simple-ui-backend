@@ -27,21 +27,21 @@ export class PostService {
       orderDirection = 'desc'
     } = paginationDto
 
-    const skip = (Number(page) - 1) * Number(limit)
+    const skip = (page - 1) * limit
 
     const posts = await this.prisma.post.findMany({
       skip,
-      take: Number(limit),
+      take: limit,
       orderBy: { [orderBy]: orderDirection }
     })
 
     const total = await this.prisma.post.count()
-    const totalPages = Math.ceil(total / Number(limit))
+    const totalPages = Math.ceil(total / limit)
 
     return {
       data: posts,
       meta: {
-        page: Number(page),
+        page: page,
         total,
         totalPages,
       }

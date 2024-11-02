@@ -31,17 +31,17 @@ export class UserService {
       orderDirection = 'desc'
     } = paginationDto
 
-    const skip = (Number(page) - 1) * Number(limit)
+    const skip = (page - 1) * limit
 
     const users = await this.prisma.user.findMany({
       skip,
-      take: Number(limit),
+      take: limit,
       orderBy: { [orderBy]: orderDirection },
       include: { posts: true }
     })
 
     const total = await this.prisma.user.count()
-    const totalPages = Math.ceil(total / Number(limit))
+    const totalPages = Math.ceil(total / limit)
 
     return {
       data: users,
