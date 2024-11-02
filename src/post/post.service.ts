@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { Post } from "./interfaces/post.interface";
+import { Post, Posts } from "./interfaces/post.interface";
 import { PostCreateDto } from "./dto/post-create.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { PostUpdateDto } from "./dto/post-update.dto";
+import { PaginationDto } from "src/common/dto/pagination.dto";
 
 @Injectable()
 export class PostService {
@@ -18,8 +19,33 @@ export class PostService {
     return post
   }
 
-  async getPosts(): Promise<Post[]> {
-    return await this.prisma.post.findMany()
+  async getPosts(paginationDto: PaginationDto): Promise<Posts> {
+    const {
+      page = 1,
+      limit = 10,
+      orderBy = 'createdAt',
+      orderDirection = 'desc'
+    } = paginationDto
+
+    const skip = (Number(page) - 1) * Number(limit)
+
+    const posts = await this.prisma.post.findMany({
+      skip,
+      take: Number(limit),
+      orderBy: { [orderBy]: orderDirection }
+    })
+
+    const total = await this.prisma.post.count()
+    const totalPages = Math.ceil(total / Number(limit))
+
+    return {
+      data: posts,
+      meta: {
+        page: Number(page),
+        total,
+        totalPages,
+      }
+    }
   }
 
   async createPost(data: PostCreateDto, authorId: number): Promise<Post> {

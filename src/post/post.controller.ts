@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
 import { PostService } from './post.service';
 import { PostCreateDto } from './dto/post-create.dto';
 import { PostUpdateDto } from './dto/post-update.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { User } from 'src/auth/decorators/user.decorator';
 
@@ -17,8 +18,8 @@ export class PostController {
 
   @Public()
   @Get()
-  async getPosts() {
-    return this.postService.getPosts()
+  async getPosts(@Query() paginationDto: PaginationDto) {
+    return this.postService.getPosts(paginationDto)
   }
 
   @Post()

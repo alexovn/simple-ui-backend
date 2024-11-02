@@ -7,3 +7,12 @@ export interface Post {
   description: string
   authorId: number | null
 }
+
+export interface Posts {
+  data: Post[],
+  meta: {
+    page: number,
+    total: number,
+    totalPages: number
+  }
+}
