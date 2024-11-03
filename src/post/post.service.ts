@@ -3,13 +3,16 @@ import { Post, Posts } from "./interfaces/post.interface";
 import { PostCreateDto } from "./dto/post-create.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { PostUpdateDto } from "./dto/post-update.dto";
-import { PaginationDto } from "src/common/dto/pagination.dto";
+import { PostsRequestDto } from "./dto/posts-request.dto";
+import { GetPostByIdDto } from "./dto/get-post-by-id.dto";
 
 @Injectable()
 export class PostService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getPost(id: number): Promise<Post | null> {
+  async getPost(params: GetPostByIdDto): Promise<Post | null> {
+    const { id } = params
+
     const post =  await this.prisma.post.findUnique({
       where: { id }
     })
@@ -19,13 +22,13 @@ export class PostService {
     return post
   }
 
-  async getPosts(paginationDto: PaginationDto): Promise<Posts> {
+  async getPosts(postsRequestDto: PostsRequestDto): Promise<Posts> {
     const {
       page = 1,
       limit = 10,
       orderBy = 'createdAt',
       orderDirection = 'desc'
-    } = paginationDto
+    } = postsRequestDto
 
     const skip = (page - 1) * limit
 
@@ -48,7 +51,7 @@ export class PostService {
     }
   }
 
-  async createPost(data: PostCreateDto, authorId: number): Promise<Post> {
+  async createPost(data: PostCreateDto, authorId: string): Promise<Post> {
     return await this.prisma.post.create({
       data: {
         ...data,
@@ -61,7 +64,7 @@ export class PostService {
     })
   }
 
-  async updatePost(params: { id: number, data: PostUpdateDto, authorId: number }): Promise<Post> {
+  async updatePost(params: { id: string, data: PostUpdateDto, authorId: string }): Promise<Post> {
     const { id, data, authorId } = params
 
     return await this.prisma.post.update({
@@ -77,7 +80,7 @@ export class PostService {
     })
   }
 
-  async deletePost(id: number): Promise<Post> {
+  async deletePost(id: string): Promise<Post> {
     const post = await this.prisma.post.delete({
       where: { id }
     })

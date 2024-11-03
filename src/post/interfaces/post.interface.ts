@@ -1,11 +1,11 @@
 export interface Post {
-  id: number
+  id: string
   createdAt: Date
   updatedAt: Date
   published: boolean
   title: string
   description: string
-  authorId: number | null
+  authorId: string
 }
 
 export interface Posts {

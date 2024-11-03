@@ -3,33 +3,39 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { User, Users } from "./interfaces/user.interface";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { PaginationDto } from "src/common/dto/pagination.dto";
+import { GetUserByIdDto } from './dto/get-user-by-id.dto';
+import { GetUserByEmailDto } from "./dto/get-user-by-email.dto";
+import { UsersRequestDto } from "./dto/users-request.dto";
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUserById(id: number): Promise<User | null> {
+  async getUserById(params: GetUserByIdDto): Promise<User | null> {
+    const { id } = params
+
     return this.prisma.user.findUnique({
       where: { id },
       include: { posts: true }
     })
   }
 
-  async getUserByEmail(email: string): Promise<User | null> {
+  async getUserByEmail(params: GetUserByEmailDto): Promise<User | null> {
+    const { email } = params
+
     return this.prisma.user.findUnique({
       where: { email },
       include: { posts: true }
     })
   }
 
-  async getUsers(paginationDto: PaginationDto): Promise<Users> {
+  async getUsers(usersRequestDto: UsersRequestDto): Promise<Users> {
     const {
       page = 1,
       limit = 10,
       orderBy = 'createdAt',
       orderDirection = 'desc'
-    } = paginationDto
+    } = usersRequestDto
 
     const skip = (page - 1) * limit
 
@@ -60,7 +66,7 @@ export class UserService {
     })
   }
 
-  async updateUser(params: { id: number, data: UpdateUserDto }): Promise<User> {
+  async updateUser(params: { id: string, data: UpdateUserDto }): Promise<User> {
     const { id, data } = params
 
     return this.prisma.user.update({
@@ -70,7 +76,7 @@ export class UserService {
     })
   }
 
-  async deleteUser(id: number): Promise<User> {
+  async deleteUser(id: string): Promise<User> {
     return this.prisma.user.delete({
       where: { id },
       include: { posts: true }

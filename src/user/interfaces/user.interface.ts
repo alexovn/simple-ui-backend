@@ -2,7 +2,7 @@ import { Post } from "src/post/interfaces/post.interface"
 import { Role as PrismaRole } from '@prisma/client'
 
 export interface User {
-  id: number
+  id: string
   createdAt: Date
   email: string
   password: string

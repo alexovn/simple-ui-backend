@@ -5,6 +5,7 @@ import { PostUpdateDto } from './dto/post-update.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { User } from 'src/auth/decorators/user.decorator';
+import { GetPostByIdDto } from './dto/get-post-by-id.dto';
 
 @Controller('posts')
 export class PostController {
@@ -12,8 +13,8 @@ export class PostController {
 
   @Public()
   @Get(':id')
-  async getPost(@Param('id') id: string) {
-    return this.postService.getPost(Number(id))
+  async getPost(@Param() params: GetPostByIdDto) {
+    return this.postService.getPost(params)
   }
 
   @Public()
@@ -25,7 +26,7 @@ export class PostController {
   @Post()
   async createPost(
     @Body() data: PostCreateDto,
-    @User('id') authorId: number
+    @User('id') authorId: string
   ) {
     return this.postService.createPost(data, authorId)
   }
@@ -34,13 +35,13 @@ export class PostController {
   async updatePost(
     @Param('id') id: string,
     @Body() data: PostUpdateDto,
-    @User('id') authorId: number
+    @User('id') authorId: string
   ) {
-    return this.postService.updatePost({ id: Number(id), data, authorId })
+    return this.postService.updatePost({ id, data, authorId })
   }
 
   @Delete(':id')
   async deletePost(@Param('id') id: string) {
-    return this.postService.deletePost(Number(id))
+    return this.postService.deletePost(id)
   }
 }
