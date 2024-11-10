@@ -1,3 +1,3 @@
 import { PaginationDto } from "src/common/dto/pagination.dto";
 
-export class UsersRequestDto extends PaginationDto {}
+export class UsersGetQueryDto extends PaginationDto {}

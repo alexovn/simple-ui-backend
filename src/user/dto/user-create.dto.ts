@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, IsEnum } from 'class-validator'
 import { ErrorEnum } from "../enums/error.enum"
 import { ApiProperty } from "@nestjs/swagger"
 
-export class CreateUserDto {
+export class UserCreateDto {
   @ApiProperty()
   @IsEmail()
   email: string

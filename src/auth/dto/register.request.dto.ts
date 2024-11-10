@@ -1,3 +1,3 @@
-import { CreateUserDto } from "src/user/dto/create-user.dto";
+import { UserCreateDto } from "src/user/dto/user-create.dto";
 
-export type RegisterRequestDto = CreateUserDto
+export type RegisterRequestDto = UserCreateDto

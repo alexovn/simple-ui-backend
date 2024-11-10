@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
+import { IsUUID } from "class-validator";
 
 export class PostUpdateDto {
   @ApiProperty()
@@ -6,4 +7,9 @@ export class PostUpdateDto {
 
   @ApiProperty()
   description: string
+}
+
+export class PostUpdateParamsDto {
+  @IsUUID()
+  id: string
 }

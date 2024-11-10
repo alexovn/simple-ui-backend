@@ -1,17 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { User, Users } from "./interfaces/user.interface";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { GetUserByIdDto } from './dto/get-user-by-id.dto';
-import { GetUserByEmailDto } from "./dto/get-user-by-email.dto";
-import { UsersRequestDto } from "./dto/users-request.dto";
+
+import { UserCreateDto } from "./dto/user-create.dto";
+import { UserUpdateDto, UserUpdateParamsDto } from "./dto/user-update.dto";
+import { UserGetParamsDto, UserGetQueryDto } from './dto/user-get.dto';
+import { UserDeleteParamsDto } from "./dto/user-delete.dto";
+import { UsersGetQueryDto } from "./dto/users-get.dto";
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUserById(params: GetUserByIdDto): Promise<User | null> {
+  async getUserById(params: UserGetParamsDto): Promise<User | null> {
     const { id } = params
 
     return this.prisma.user.findUnique({
@@ -20,8 +21,8 @@ export class UserService {
     })
   }
 
-  async getUserByEmail(params: GetUserByEmailDto): Promise<User | null> {
-    const { email } = params
+  async getUserByEmail(query: UserGetQueryDto): Promise<User | null> {
+    const { email } = query
 
     return this.prisma.user.findUnique({
       where: { email },
@@ -29,13 +30,13 @@ export class UserService {
     })
   }
 
-  async getUsers(usersRequestDto: UsersRequestDto): Promise<Users> {
+  async getUsers(query: UsersGetQueryDto): Promise<Users> {
     const {
       page = 1,
       limit = 10,
       orderBy = 'createdAt',
       orderDirection = 'desc'
-    } = usersRequestDto
+    } = query
 
     const skip = (page - 1) * limit
 
@@ -59,15 +60,23 @@ export class UserService {
     }
   }
 
-  async createUser(data: CreateUserDto): Promise<User> {
+  async createUser(data: UserCreateDto): Promise<User> {
     return this.prisma.user.create({
       data,
       include: { posts: true }
     })
   }
 
-  async updateUser(params: { id: string, data: UpdateUserDto }): Promise<User> {
-    const { id, data } = params
+  async updateUser(
+    {
+      params,
+      data,
+    }:{
+      params: UserUpdateParamsDto,
+      data: UserUpdateDto
+    }
+  ): Promise<User> {
+    const { id } = params
 
     return this.prisma.user.update({
       where: { id },
@@ -76,7 +85,9 @@ export class UserService {
     })
   }
 
-  async deleteUser(id: string): Promise<User> {
+  async deleteUser(params: UserDeleteParamsDto): Promise<User> {
+    const { id } = params
+
     return this.prisma.user.delete({
       where: { id },
       include: { posts: true }

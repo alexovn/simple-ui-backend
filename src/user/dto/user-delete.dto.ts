@@ -1,6 +1,6 @@
 import { IsUUID } from "class-validator";
 
-export class GetPostByIdDto {
+export class UserDeleteParamsDto {
   @IsUUID()
   id: string
 }
