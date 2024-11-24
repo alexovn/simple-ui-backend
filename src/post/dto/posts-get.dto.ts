@@ -1,3 +1,7 @@
 import { PaginationDto } from "src/common/dto/pagination.dto";
 
-export class PostsGetQueryDto extends PaginationDto {}
+export class PostsGetQueryDto extends PaginationDto {
+  filter?: {
+    authorId?: string
+  }
+}

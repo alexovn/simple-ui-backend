@@ -38,7 +38,8 @@ export class PostService {
       page = 1,
       limit = 10,
       orderBy = 'createdAt',
-      orderDirection = 'desc'
+      orderDirection = 'desc',
+      filter
     } = query
 
     const skip = (page - 1) * limit
@@ -54,6 +55,9 @@ export class PostService {
             lastName: true
           }
         }
+      },
+      where: {
+        authorId: filter?.authorId
       }
     })
 
