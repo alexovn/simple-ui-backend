@@ -10,7 +10,7 @@ import { PostUpdateParamsDto } from './dto/post-update.dto'
 import { PostsGetQueryDto } from "./dto/posts-get.dto";
 import { PostDeleteParamsDto } from "./dto/post-delete.dto";
 
-@Controller('posts')
+@Controller('api/posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 

@@ -7,7 +7,7 @@ import { RegisterRequestDto } from "./dto/register.request.dto";
 import { Public } from "./decorators/public.decorator";
 
 @Public()
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 

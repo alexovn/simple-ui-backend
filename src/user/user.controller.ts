@@ -9,7 +9,7 @@ import { UserDeleteParamsDto } from "./dto/user-delete.dto";
 import { UsersGetQueryDto } from "./dto/users-get.dto";
 
 @ApiTags('users')
-@Controller('users')
+@Controller('api/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
