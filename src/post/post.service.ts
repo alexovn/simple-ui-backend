@@ -17,7 +17,15 @@ export class PostService {
     const { id } = params
 
     const post =  await this.prisma.post.findUnique({
-      where: { id }
+      where: { id },
+      include: {
+        author: {
+          select: {
+            firstName: true,
+            lastName: true
+          }
+        }
+      }
     })
     if (!post) {
       throw new BadRequestException('Post not found')
@@ -38,7 +46,15 @@ export class PostService {
     const posts = await this.prisma.post.findMany({
       skip,
       take: limit,
-      orderBy: { [orderBy]: orderDirection }
+      orderBy: { [orderBy]: orderDirection },
+      include: {
+        author: {
+          select: {
+            firstName: true,
+            lastName: true
+          }
+        }
+      }
     })
 
     const total = await this.prisma.post.count()
@@ -61,6 +77,14 @@ export class PostService {
         author: {
           connect: {
             id: authorId
+          }
+        }
+      },
+      include: {
+        author: {
+          select: {
+            firstName: true,
+            lastName: true
           }
         }
       }
@@ -89,6 +113,14 @@ export class PostService {
             id: authorId,
           }
         }
+      },
+      include: {
+        author: {
+          select: {
+            firstName: true,
+            lastName: true
+          }
+        }
       }
     })
   }
@@ -97,7 +129,15 @@ export class PostService {
     const { id } = params
 
     const post = await this.prisma.post.delete({
-      where: { id }
+      where: { id },
+      include: {
+        author: {
+          select: {
+            firstName: true,
+            lastName: true
+          }
+        }
+      }
     })
     if (!post) {
       throw new BadRequestException('Post not found')

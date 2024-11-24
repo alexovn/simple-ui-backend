@@ -6,6 +6,10 @@ export interface Post {
   title: string
   description: string
   authorId: string
+  author: {
+    firstName: string | null
+    lastName: string | null
+  }
 }
 
 export interface Posts {

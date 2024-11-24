@@ -17,7 +17,13 @@ export class UserService {
 
     return this.prisma.user.findUnique({
       where: { id },
-      include: { posts: true }
+      include: {
+        posts: {
+          include: {
+            author: true
+          }
+        }
+      }
     })
   }
 
@@ -26,7 +32,13 @@ export class UserService {
 
     return this.prisma.user.findUnique({
       where: { email },
-      include: { posts: true }
+      include: {
+        posts: {
+          include: {
+            author: true
+          }
+        }
+      }
     })
   }
 
@@ -44,7 +56,13 @@ export class UserService {
       skip,
       take: limit,
       orderBy: { [orderBy]: orderDirection },
-      include: { posts: true }
+      include: {
+        posts: {
+          include: {
+            author: true
+          }
+        }
+      }
     })
 
     const total = await this.prisma.user.count()
@@ -63,7 +81,13 @@ export class UserService {
   async createUser(data: UserCreateDto): Promise<User> {
     return this.prisma.user.create({
       data,
-      include: { posts: true }
+      include: {
+        posts: {
+          include: {
+            author: true
+          }
+        }
+      }
     })
   }
 
@@ -81,7 +105,13 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data,
-      include: { posts: true }
+      include: {
+        posts: {
+          include: {
+            author: true
+          }
+        }
+      }
     })
   }
 
@@ -90,7 +120,13 @@ export class UserService {
 
     return this.prisma.user.delete({
       where: { id },
-      include: { posts: true }
+      include: {
+        posts: {
+          include: {
+            author: true
+          }
+        }
+      }
     })
   }
 }
