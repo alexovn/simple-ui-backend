@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { User, Users } from "./interfaces/user.interface";
+import { User, UserInfo, Users } from "./interfaces/user.interface";
 
 import { UserCreateDto } from "./dto/user-create.dto";
 import { UserUpdateDto, UserUpdateParamsDto } from "./dto/user-update.dto";
@@ -38,6 +38,21 @@ export class UserService {
             author: true
           }
         }
+      }
+    })
+  }
+
+  async getUserInfoById(params: UserGetParamsDto): Promise<UserInfo | null> {
+    const { id } = params
+
+    return this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true
       }
     })
   }

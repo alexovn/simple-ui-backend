@@ -12,6 +12,14 @@ export interface User {
   posts: Post[]
 }
 
+export interface UserInfo {
+  id: string
+  email: string
+  firstName?: string | null
+  lastName?: string | null
+  role: PrismaRole
+}
+
 export interface Users {
   data: User[],
   meta: {

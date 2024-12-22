@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Body, Post, Patch, Delete, Query, NotFoundException } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { ApiTags } from "@nestjs/swagger";
+import { Public } from "src/auth/decorators/public.decorator";
 
 import { UserCreateDto } from "./dto/user-create.dto";
 import { UserUpdateDto, UserUpdateParamsDto } from "./dto/user-update.dto";
@@ -18,6 +19,15 @@ export class UserController {
     return await this.userService.getUsers(query)
   }
 
+  @Get(':id')
+  async getUserById(@Param() params: UserGetParamsDto) {
+    const user = await this.userService.getUserById(params)
+    if (!user) {
+      throw new NotFoundException(`User with id ${params.id} not found`)
+    }
+    return user
+  }
+
   @Get('email')
   async getUserByEmail(@Query() query: UserGetQueryDto) {
     const user = await this.userService.getUserByEmail(query)
@@ -27,9 +37,10 @@ export class UserController {
     return user
   }
 
-  @Get(':id')
-  async getUserById(@Param() params: UserGetParamsDto) {
-    const user = await this.userService.getUserById(params)
+  @Public()
+  @Get('info/:id')
+  async getUserInfoById(@Param() params: UserGetParamsDto) {
+    const user = await this.userService.getUserInfoById(params)
     if (!user) {
       throw new NotFoundException(`User with id ${params.id} not found`)
     }
